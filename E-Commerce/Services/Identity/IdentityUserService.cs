@@ -82,8 +82,9 @@ namespace E_Commerce.Services.Identity
                 UserId = user.Id,
                 Email = user.Email,
                 Username = user.UserName,
+                Token = await jwtService.GetToken(user, TimeSpan.FromMinutes(5)),
                 //FirstName = user.FirstName,
-               // LastName = user.LastName,
+                // LastName = user.LastName,
 
                 Roles = await userManager.GetRolesAsync(user),
             };

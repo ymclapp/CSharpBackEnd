@@ -19,6 +19,7 @@ using Azure.Storage.Queues;
 using Azure.Storage.Blobs;
 using Azure.Core.Extensions;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace E_Commerce
 {
@@ -59,6 +60,17 @@ namespace E_Commerce
             services.AddScoped<IDashboardRepository, DashboardRepository>();
             services.AddSingleton<IFileUploadService, AzureFileUploadService>();
             services.AddSingleton<IEmailService, SendGridEmailService>();
+            services.AddSingleton<JwtService>();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+  .AddJwtBearer(options =>
+  {
+      options.TokenValidationParameters = JwtService.GetValidationParameters(Configuration);
+  });
             services.AddAzureClients(builder =>
             {
                 builder.AddBlobServiceClient(Configuration["AzureStorageAccountName:blob"], preferMsi: true);
@@ -107,7 +119,9 @@ namespace E_Commerce
 
             app.UseRouting();
 
+            //Figure out who the user is
             app.UseAuthentication();
+            //And what  they can do
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
