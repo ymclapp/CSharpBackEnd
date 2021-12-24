@@ -51,6 +51,7 @@ namespace E_Commerce
             .AddEntityFrameworkStores<ECommerceDbContext>();  //where are users stored?
 
             services.AddScoped<IUserService, IdentityUserService>();
+            services.AddScoped<JwtService>();
             //end of Identity
 
             services.AddScoped<IProductCategoryRepository, DatabaseProductCategoryRepository>();

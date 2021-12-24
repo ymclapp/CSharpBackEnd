@@ -18,14 +18,15 @@ namespace E_Commerce.Services.Identity
         private readonly UserManager<IdentityUser> userManager;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IEmailService emailService;
+        private readonly JwtService jwtService;
 
-
-        public IdentityUserService ( SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, IEmailService emailService )
+        public IdentityUserService ( SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, IHttpContextAccessor httpContextAccessor, IEmailService emailService, JwtService jwtService )
         {
             this.signInManager = signInManager;
             this.userManager = userManager;
             this.httpContextAccessor = httpContextAccessor;
             this.emailService = emailService;
+            this.jwtService = jwtService;
         }
 
         public async Task<UserDto> Authenticate ( LoginData data )
