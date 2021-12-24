@@ -18,6 +18,7 @@ using Microsoft.Extensions.Azure;
 using Azure.Storage.Queues;
 using Azure.Storage.Blobs;
 using Azure.Core.Extensions;
+using Microsoft.OpenApi.Models;
 
 namespace E_Commerce
 {
@@ -62,6 +63,15 @@ namespace E_Commerce
                 builder.AddBlobServiceClient(Configuration["AzureStorageAccountName:blob"], preferMsi: true);
                 builder.AddQueueServiceClient(Configuration["AzureStorageAccountName:queue"], preferMsi: true);
             });
+            services.AddSwaggerGen(options =>
+            {
+                //make sure  to get the "using statement"
+                options.SwaggerDoc("v1", new OpenApiInfo()
+                {
+                    Title = "ECommerce",
+                    Version = "v1",
+                });
+            });
 
         }
 
@@ -72,12 +82,23 @@ namespace E_Commerce
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+            // else
+            // {
+            //      app.UseExceptionHandler("/Home/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //    app.UseHsts();
+            // }
+
+            app.UseSwagger(options =>
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                options.RouteTemplate = "/api/{documentName}/swagger.json";
+            });
+
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/api/v1/swagger.json", "ECommerce");
+                options.RoutePrefix = "docs";
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
@@ -91,13 +112,18 @@ namespace E_Commerce
             app.UseEndpoints(endpoints =>
             {
                 //First check to see if there is a Razor Page - order of endpoints matter
-                endpoints.MapRazorPages();
+                //endpoints.MapRazorPages();
                 //Used this for APIs, which specify their own routes
                 endpoints.MapControllers();
+
+                endpoints.MapGet("/", async context =>
+                {
+                    context.Response.Redirect("/docs");
+                });
                 //Default route "convention"
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+       //         endpoints.MapControllerRoute(
+        //            name: "default",
+        //            pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
