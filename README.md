@@ -5,6 +5,7 @@ Lab 28 - sprint 1 milestone 3 - adding roles and identity
 Lab 29 - sprint 1 milestone 4 - blob storage
 Lab 31 - sprint 2 milestone 1 - Consumer Site (The Storefront)
 Lab 32 - sprint 2 milestone 2 - Shopping Cart
+Lab 33 - sprint 2 milestone 3 - Email services
 
 
 ##   App Summary:
@@ -15,6 +16,8 @@ There is an Admin Dashboard link at the top of the screen.  That will take you t
 Now, with specific roles, you cannot conduct certain processes without the appropriate role  Additionally, we added cookies to remember the user.
 
 I created Razor Pages for the My Account, to do a Search, and for the results of clicking on a specific product
+
+There is an active products table that shows the items for sale.  You are able to add to cart.  I'm working on getting the cart items to be the actual item that was added to the cart.  I added the email service to the app.  Working on adding the customer registration process.
 
 ##  How to use it:
 
